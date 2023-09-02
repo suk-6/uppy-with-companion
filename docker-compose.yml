@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "30000:30000"
+      - "30001:30001"
+      - "30002:30002"
+    volumes:
+      - ./files:/usr/src/app/files:rw

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title></title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link
+			href="https://releases.transloadit.com/uppy/v3.14.1/uppy.min.css"
+			rel="stylesheet"
+		/>
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="upgrade-insecure-requests"
+		/>
+	</head>
+	<body>
+		<noscript>This web page requires JavaScript to work properly.</noscript>
+		<h1>Tus Upload Test</h1>
+		<div id="tus"></div>
+		<script type="module">
+			import {
+				Uppy,
+				Dashboard,
+				GoogleDrive,
+				Dropbox,
+				Tus,
+			} from "https://releases.transloadit.com/uppy/v3.14.1/uppy.min.mjs";
+
+			const uppy = new Uppy({ debug: true, autoProceed: false })
+				.use(Dashboard, {
+					inline: true,
+					target: "#tus",
+					plugins: [],
+				})
+				.use(GoogleDrive, {
+					target: Dashboard,
+					companionUrl: "https://companion.wsuk.dev",
+				})
+				.use(Dropbox, {
+					target: Dashboard,
+					companionUrl: "https://companion.wsuk.dev",
+				})
+				.use(Tus, {
+					endpoint: "https://tus-node.wsuk.dev/files",
+					// endpoint: "https://tusd.tusdemo.net/files",
+					removeFingerprintOnSuccess: true,
+				});
+
+			uppy.on("success", (fileCount) => {
+				console.log(`${fileCount} files uploaded`);
+			});
+		</script>
+	</body>
+</html>
