@@ -1,0 +1,11 @@
+upload.example.com {
+    reverse_proxy 0.0.0.0:30000
+}
+
+tus.example.com {
+    reverse_proxy 0.0.0.0:30001
+}
+
+companion.example.com {
+    reverse_proxy 0.0.0.0:30002
+}
