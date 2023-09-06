@@ -18,7 +18,7 @@ app.use(session({
 }))
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://tus.wsuk.dev')
+  res.setHeader('Access-Control-Allow-Origin', process.env.clientUrl)
   res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS')
   res.setHeader('Access-Control-Allow-Credentials', 'true')
   next()
@@ -43,13 +43,13 @@ const companionOptions = {
     },
   },
   server: {
-    host: 'companion.wsuk.dev',
-    protocol: 'https',
+    host: process.env.companionHost,
+    protocol: process.env.companionProtocol,
   },
   filePath: '/tmp',
   secret: secret,
   debug: true,
-  corsOrigins: 'https://tus.wsuk.dev',
+  corsOrigins: process.env.clientUrl,
   COMPANION_PORT: 30002
 }
 

@@ -3,6 +3,7 @@ const cors = require('@fastify/cors');
 const { Server } = require('@tus/server');
 const { FileStore } = require('@tus/file-store');
 const fs = require('fs');
+require('dotenv').config();
 
 const uploadFolder = './files';
 
@@ -10,12 +11,12 @@ if (!fs.existsSync(uploadFolder)) {
     fs.mkdirSync(uploadFolder);
 }
 
-fastify.register(cors, { origin: ['https://tus.wsuk.dev', 'https://companion.wsuk.dev'], methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS', credentials: true })
+fastify.register(cors, { origin: [process.env.clientUrl, process.env.companionUrl], methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS', credentials: true })
 
 const tusServer = new Server({
     path: '/files',
     respectForwardedHeaders: true,
-    datastore: new FileStore({ directory: './files' })
+    datastore: new FileStore({ directory: uploadFolder })
 })
 
 fastify.addContentTypeParser(
@@ -23,13 +24,13 @@ fastify.addContentTypeParser(
 );
 
 fastify.all('/files', (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://tus.wsuk.dev");
+    res.header("Access-Control-Allow-Origin", process.env.clientUrl);
     res.header("Access-Control-Allow-Credentials", "true");
     tusServer.handle(req.raw, res.raw);
 });
 
 fastify.all('/files/*', (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://tus.wsuk.dev");
+    res.header("Access-Control-Allow-Origin", process.env.clientUrl);
     res.header("Access-Control-Allow-Credentials", "true");
     tusServer.handle(req.raw, res.raw);
 });
